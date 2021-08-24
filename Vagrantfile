@@ -71,6 +71,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "bootstrap.sh"
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "deploy-nginx.yml"
+   # ansible.playbook = "db-server-playbook.yml"
     ansible.limit = 'all,localhost'
   end
 

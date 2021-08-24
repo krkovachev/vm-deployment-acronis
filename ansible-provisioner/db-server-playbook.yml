@@ -1,0 +1,55 @@
+---
+- name: Install database
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    mysql_root_password: root
+
+  tasks:
+    - name: Install MySQL
+      yum:
+        name: mysql
+        update_cache: yes
+        cache_valid_time: 360
+        state: present
+
+    - name: Start MySQL Service
+      service:
+        name: mysql
+        state: started
+
+    - name: Update MySQL root password for all root accounts  
+      mysql_user:  
+        name: root  
+        host: "{{ item }}"  
+        password: "{{ mysql_root_password }}"  
+        login_user: root  
+        login_password: "{{ mysql_root_password }}"  
+        check_implicit_admin: yes  
+        priv: "*.*:ALL,GRANT"  
+      with_items:  
+      - "{{ ansible_hostname }}"  
+      - 127.0.0.1  
+      - ::1  
+      - localhost
+
+    - name: Create new DB
+      mysql_db: 
+        name: testdb 
+        state: present 
+        login_user: root 
+        login_password: "{{ mysql_root_password }}"
+
+    - name: Add sample data to DB
+      copy: 
+        src: dump.sql
+        dest: /tmp/dump.sql
+
+    - name: Insert sample data to DB
+      mysql_db:
+        name: testdb
+        state: import
+        target: /tmp/dump.sql
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
