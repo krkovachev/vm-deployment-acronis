@@ -6,3 +6,5 @@
   roles:
     - postgresql
     - nginx
+    - docker
+    - docker.httpd

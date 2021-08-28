@@ -1,0 +1,22 @@
+---
+# tasks file for docker.httpd
+  - name: Create Directory
+    file:
+       path: /webpages
+       state: directory
+
+
+  - name: Copy webpage content
+    copy:
+       content: "Testing webserver container!!\n"
+       dest: "/webpages/index.html"
+
+
+  - name: Launch Webserver Container
+    docker_container:
+       name: "webserver"
+       image: "httpd"
+       state: started
+       exposed_ports: "80"
+       ports: "81:80"
+       volumes: /webpages:/usr/local/apache2/htdocs
