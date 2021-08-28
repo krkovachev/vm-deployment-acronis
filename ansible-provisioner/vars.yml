@@ -1,5 +1,0 @@
----
-db_user: root
-db_password: root
-db_name: app1
-ansible_ssh_pipelining: yes

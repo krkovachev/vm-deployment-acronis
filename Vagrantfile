@@ -1,6 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-
+@ansible_home = "/home/vagrant/.ansible"
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -45,7 +45,6 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
  config.vm.synced_folder '.', "/vagrant", type: "rsync", rsync__args: ["-r"]
  config.vm.synced_folder 'ansible-provisioner', "/vagrant2", type: "rsync", rsync__args: ["-r"]
- config.vm.synced_folder 'nginx', "/vagrant3", type: "rsync", rsync__args: ["-r"]
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
@@ -70,9 +69,7 @@ Vagrant.configure("2") do |config|
   # SHELL
   config.vm.provision "shell", path: "bootstrap.sh"
   config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "deploy-nginx.yml"
-    ansible.playbook = "deploy-postgresql.yml"
-   # ansible.playbook = "db-server-playbook-copy.yml"
+    ansible.playbook = "playbook.yml"
     ansible.limit = 'all,localhost'
   end
 
