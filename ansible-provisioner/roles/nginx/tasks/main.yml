@@ -5,17 +5,17 @@
 #      name: epel-release
 #      state: present
 
-  - name: Install nginx
+  - name: "Install nginx"
     yum:
       name: nginx
       state: present
-
-  - name: Insert Index Page
+ 
+  - name: "Insert Index Page"
     template:
       src: index.html
       dest: /var/www/html/index.html
 
-  - name: Start NGiNX
+  - name: "Start NGiNX"
     service:
       name: nginx
       state: started
