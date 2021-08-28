@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "centos/7"
+  config.vm.box = "ubuntu/focal64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -71,6 +71,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "bootstrap.sh"
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "deploy-nginx.yml"
+    ansible.playbook = "deploy-postgresql.yml"
    # ansible.playbook = "db-server-playbook-copy.yml"
     ansible.limit = 'all,localhost'
   end

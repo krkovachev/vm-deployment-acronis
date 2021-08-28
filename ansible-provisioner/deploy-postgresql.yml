@@ -1,0 +1,89 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: "Install PostgreSQL packages"
+      ansible.builtin.package: "name={{ item }} state=present"
+      with_items:
+        - postgresql
+
+    - name: "Install pip3"
+      apt: name=python3-pip state=present 
+
+    - name: "Make sure psycopg2 is installed"
+      pip:
+        name: psycopg2-binary
+        state: present
+
+    - name: "Find out if PostgreSQL is initialized"
+      ansible.builtin.stat:
+        path: "/var/lib/pgsql/data/pg_hba.conf"
+      register: postgres_data
+
+    - name: "Start and enable services"
+      service: "name={{ item }} state=started enabled=yes"
+      with_items:
+        - postgresql
+
+    - name: "Create app database"
+      postgresql_db:
+        state: present
+        name: "{{ db_name }}"
+      become: yes
+      become_user: postgres
+
+    - name: "Create the database specified in vars"
+      become: true
+      become_user: postgres
+      postgresql_db: name={{ db_name }}
+           template='template0'
+           state=present
+
+    - name: "Ensure user has access to the new database"
+      become: true
+      become_user: postgres
+      postgresql_user: db={{ db_name }}
+           name={{ db_user }}
+           password={{ db_password }}
+           priv=ALL
+           state=present
+
+    - name: "Ensure user does not have unnecessary permissions"
+      become: true
+      become_user: postgres
+      postgresql_user: name={{ db_user }}
+           role_attr_flags=NOSUPERUSER,NOCREATEDB
+           state=present
+
+    - name: "Allow md5 connection for the db user"
+      remote_user: root
+      postgresql_pg_hba:
+        dest: "/etc/postgresql/12/main/pg_hba.conf"
+        contype: host
+        databases: all
+        method: md5
+        users: "{{ db_user }}"
+        create: true
+      become: yes
+      become_user: postgres
+      notify: restart postgres
+
+    - name: "Load SQL script into a variable"
+      set_fact:
+        migration_sql: "{{ lookup('file', 'dump.sql') }}"
+
+    - name: "Execute script from variable"
+      become: true
+      become_user: postgres
+      shell: psql {{ db_name }} < dump.sql
+      register: sql_response_variable
+
+  handlers:
+    - name: restart postgres
+      service: name=postgresql state=restarted
+
