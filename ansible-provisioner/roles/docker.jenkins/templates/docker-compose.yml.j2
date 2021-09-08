@@ -6,18 +6,19 @@ services:
     - "8084:8080"
     environment:
     - JAVA_OPTS=-Xmx2048m
+    - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
     volumes:
-      - ./jenkins-master:/var/jenkins_home
+    - ./jenkins-master:/var/jenkins_home
     networks:
-      - backend
-worker:
+    - backend
+  worker:
     image: eeacms/jenkins-slave
     environment:
       JAVA_OPTS: "-Xmx2048m"
-      JENKINS_MASTER: "http://master:8084"
+      JENKINS_MASTER: "http://master:8080"
       JENKINS_NAME: "worker"
-      JENKINS_USER: "tara"
-      JENKINS_PASS: "tara_password"
+      JENKINS_USER: "worker"
+      JENKINS_PASS: "woeker"
       JENKINS_RETRY: "10"
     volumes:
       - ./jenkins-worker:/var/jenkins_home/worker
