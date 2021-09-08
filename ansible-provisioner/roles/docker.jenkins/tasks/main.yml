@@ -1,0 +1,22 @@
+---
+# tasks file for docker.jenkins
+- name: Create project directory
+  become: true
+  file:
+    path: /etc/jenkins-docker/
+    state: directory
+
+- name: Set docker-compose template
+  become: true
+  template:
+     src: docker-compose.yml.j2
+     dest: /etc/jenkins-docker/docker-compose.yml
+ 
+- name: Start service with docker-compose
+  become: yes
+  docker_service:
+    project_name: Jenkins Docker service
+    project_src: /etc/jenkins-docker
+    files:
+      - docker-compose.yml
+    recreate: always

@@ -8,3 +8,4 @@
     - nginx
     - docker
     - docker.httpd
+    - docker.jenkins
