@@ -24,6 +24,19 @@ services:
       - ./jenkins-worker:/var/jenkins_home/worker
     networks:
       - backend
+  worker2:
+    image: eeacms/jenkins-slave
+    environment:
+      JAVA_OPTS: "-Xmx2048m"
+      JENKINS_MASTER: "http://master:8080"
+      JENKINS_NAME: "worker2"
+      JENKINS_USER: "worker2"
+      JENKINS_PASS: "woeker2"
+      JENKINS_RETRY: "10"
+    volumes:
+      - ./jenkins-worker:/var/jenkins_home/worker
+    networks:
+      - backend
 networks:
   backend:
     driver: bridge

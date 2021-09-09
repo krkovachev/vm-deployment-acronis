@@ -6,19 +6,6 @@
     path: /etc/jenkins-docker/
     state: directory
 
-- name: copy Dockerfile
-  copy:
-    src: Dockerfile
-    dest: /etc/jenkins-docker/Dockerfile
-
-    #- name: Build custom jenkins container image
-    # docker_image:
-    #name: customimage:jenkins
-    #build:
-    #  path: /etc/jenkins-docker
-    #source: build
-    #state: present
-
 - name: Set docker-compose template
   become: true
   template:
