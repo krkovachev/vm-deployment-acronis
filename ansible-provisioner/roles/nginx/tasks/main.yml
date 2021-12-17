@@ -6,9 +6,9 @@
 #      state: present
 
   - name: "Install nginx"
-    yum:
+    apt: 
       name: nginx
-      state: present
+      state: latest
  
   - name: "Insert Index Page"
     template:

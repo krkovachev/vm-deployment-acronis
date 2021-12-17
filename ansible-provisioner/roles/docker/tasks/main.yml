@@ -57,6 +57,6 @@
       append: yes
 
   - name: Install docker compose
-    yum:
+    apt:
       name: docker-compose
 

@@ -14,7 +14,7 @@
  
 - name: Start service with docker-compose
   become: yes
-  docker_service:
+  docker_compose:
     project_name: Jenkins Docker service
     project_src: /etc/jenkins-docker
     files:

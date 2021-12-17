@@ -13,4 +13,5 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "playbook.yml"
     ansible.limit = 'all,localhost'
   end
+  config.vm.post_up_message = "Please use the following links: /n  This is the web server installed directly on the VM: http://192.168.33.10/   This is the web server installed on docker container: http://192.168.33.10:81/   This is Jenkins installation on Docker http://192.168.33.10:8084/"
 end
