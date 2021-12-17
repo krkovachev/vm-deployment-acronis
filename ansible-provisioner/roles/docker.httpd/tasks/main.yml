@@ -8,7 +8,7 @@
 
   - name: Copy webpage content
     copy:
-       content: "Testing webserver container!!\n"
+       content: "This webserver is on docker container!!\n"
        dest: "/webpages/index.html"
 
 

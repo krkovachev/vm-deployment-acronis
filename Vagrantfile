@@ -13,5 +13,15 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "playbook.yml"
     ansible.limit = 'all,localhost'
   end
-  config.vm.post_up_message = "Please use the following links: /n  This is the web server installed directly on the VM: http://192.168.33.10/   This is the web server installed on docker container: http://192.168.33.10:81/   This is Jenkins installation on Docker http://192.168.33.10:8084/"
+  up_message = <<-MSG
+  This is installation of web server directly on the vm using ansible role, installation of docker, webserver and jenkins master/slave configuration using ansible roles.
+
+  Additional information:
+   * This is the web server installed directly on the VM: http://192.168.33.10/
+   * This is the web server installed on docker container: http://192.168.33.10:81/
+   * This is Jenkins installation on Docker http://192.168.33.10:8084/
+   *
+   * Example script you can run against jenkins slaves from Jenkins > under Build Extrator Status click on the worker you want to run the script > Script console - "println "uptime".execute().text"
+  MSG
+  config.vm.post_up_message = up_message
 end
